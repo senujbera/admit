@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>admit</title>
+  <style>
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>admit</h1>
+
+  <form id="add-task-form">
+    <label for="task-input">admit</label>
+    <input type="text" id="task-input" required>
+    <button type="submit">ADMIT</button>
+  </form>
+
+  <ul id="task-list">
+    <!-- Task items will be dynamically added here -->
+  </ul>
+
+  <script>
+    // Get the form and list elements
+    const addTaskForm = document.getElementById('add-task-form');
+    const taskList = document.getElementById('task-list');
+
+    // Function to add a task
+    function addTask(event) {
+      event.preventDefault(); // Prevent form submission
+
+      const taskInput = document.getElementById('task-input');
+      const task = taskInput.value;
+
+      // Create new list item
+      const listItem = document.createElement('li');
+      listItem.textContent = task;
+
+      // Append the new task to the list
+      taskList.appendChild(listItem);
+
+      // Save the tasks to localStorage
+      saveTasks();
+
+      // Clear the input field
+      taskInput.value = '';
+    }
+
+    // Function to save tasks to localStorage
+    function saveTasks() {
+      const tasks = Array.from(taskList.getElementsByTagName('li')).map(listItem => listItem.textContent);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    // Function to load tasks from localStorage
+    function loadTasks() {
+      const savedTasks = localStorage.getItem('tasks');
+      if (savedTasks) {
+        const tasks = JSON.parse(savedTasks);
+        tasks.forEach(task => {
+          const listItem = document.createElement('li');
+          listItem.textContent = task;
+          taskList.appendChild(listItem);
+        });
+      }
+    }
+
+    // Add event listener to the form submission
+    addTaskForm.addEventListener('submit', addTask);
+
+    // Load saved tasks when the page is loaded
+    window.addEventListener('load', loadTasks);
+  </script>
+</body>
+</html>
